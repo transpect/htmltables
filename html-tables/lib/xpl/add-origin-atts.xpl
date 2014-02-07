@@ -11,7 +11,7 @@
     <p:documentation>An XHTML document (although proper namespace is not important).</p:documentation>
   </p:input>
   <p:input port="stylesheet">
-    <p:document href="html-tables.xsl"/>
+    <p:document href="../xsl/html-tables.xsl"/>
   </p:input>
   <p:output port="result" primary="true"/>
 
