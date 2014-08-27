@@ -181,12 +181,21 @@
   </xsl:template>
 
   <xsl:template match="*:td | *:th" mode="htmltable:normalize-rowspans">
-    <xsl:param name="rownum" as="xs:integer" />
-    <xsl:copy>
-      <xsl:copy-of select="@*" />
-      <xsl:attribute name="data-rownum" select="$rownum" />
-      <xsl:copy-of select="node()" />
-    </xsl:copy>
+    <xsl:param name="rownum" as="xs:integer?" />
+    <xsl:choose>
+      <xsl:when test="$rownum">
+        <xsl:copy>
+          <xsl:copy-of select="@*"/>
+          <xsl:attribute name="data-rownum" select="$rownum"/>
+          <xsl:copy-of select="node()"/>
+        </xsl:copy>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>Cell <xsl:copy-of select="."/> probably is in a row that is not contained in a table</xsl:message>
+        <xsl:comment>not in a table?</xsl:comment>
+        <xsl:copy-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="@*|*" 
