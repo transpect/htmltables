@@ -26,7 +26,7 @@
   </xsl:template>
 
   <xsl:template match="*[not(*:colgroup and @data-colcount and @data-rowcount)]
-                        [*:tr]" mode="htmltable:tables-add-atts">
+                        [*:tr]" mode="htmltable:tables-add-atts htmltable:tables-add-atts-scale">
     <xsl:param name="grid" as="xs:string*" tunnel="yes" />
     <xsl:param name="scaling" as="xs:double?" tunnel="yes" />
     <xsl:variable name="normalized" as="document-node(element(*))">
