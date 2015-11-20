@@ -3,15 +3,15 @@
   version="2.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xml2idml="http://www.le-tex.de/namespace/xml2idml"
-  xmlns:letex="http://www.le-tex.de/namespace"
+  xmlns:tr="http://transpect.io" 
   xmlns:css="http://www.w3.org/1996/css"
   xmlns:html="http://www.w3.org/1999/xhtml"
-  xmlns:htmltable="http://www.le-tex.de/namespace/htmltable"
+  xmlns:htmltable="http://transpect.io/htmltable"
   xmlns:saxon="http://saxon.sf.net/"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   >
 
-  <xsl:import href="http://transpect.le-tex.de/xslt-util/lengths/lengths.xsl" />
+  <xsl:import href="http://transpect.io/xslt-util/lengths/xsl/lengths.xsl" />
 
 
   <!-- Taken from http://andrewjwelch.com/code/xslt/table/table-normalization.html 
@@ -88,7 +88,7 @@
   </xsl:template>
 
   <xsl:template match="@css:width" mode="htmltable:normalize-colspans">
-    <xsl:attribute name="data-twips-width" select="letex:length-to-unitless-twip(.)" />
+    <xsl:attribute name="data-twips-width" select="tr:length-to-unitless-twip(.)" />
   </xsl:template>
 
 

@@ -2,7 +2,7 @@
 <p:declare-step 
   xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:c="http://www.w3.org/ns/xproc-step" 
-  xmlns:htmltable="http://www.le-tex.de/namespace/htmltable"
+  xmlns:htmltable="http://transpect.io/htmltable"
   version="1.0"
   name="add-origin-atts"
   type="htmltable:add-origin-atts">

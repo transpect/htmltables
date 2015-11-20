@@ -2,11 +2,11 @@
 <xsl:stylesheet 
   version="2.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:htmltable="http://www.le-tex.de/namespace/htmltable"
-  xmlns:letex="http://www.le-tex.de/namespace"
+  xmlns:htmltable="http://transpect.io/htmltable"
   xmlns:css="http://www.w3.org/1996/css"
   xmlns:saxon="http://saxon.sf.net/"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:tr="http://transpect.io" 
   >
 
 
@@ -42,7 +42,7 @@
       <xsl:if test="($denormalized/self::*:tr)[1]/@data-twips-width">
         <xsl:variable name="width" select="($denormalized/self::*:tr)[1]/@data-twips-width * ($scaling, 1.0)[1]" as="xs:double" />
         <xsl:variable name="twips-grid" as="xs:double*" 
-          select="for $g in $grid return letex:length-to-unitless-twip($g)" />
+          select="for $g in $grid return tr:length-to-unitless-twip($g)" />
         <xsl:variable name="distances" as="xs:double*" 
           select="for $g in $twips-grid return abs($g - $width)" />
         <xsl:variable name="closest" as="xs:double" 
