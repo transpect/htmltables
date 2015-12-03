@@ -2,7 +2,7 @@
 <xsl:stylesheet 
   version="2.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:xml2idml="http://www.le-tex.de/namespace/xml2idml"
+  xmlns:xml2idml="http://transpect.io/xml2idml"
   xmlns:tr="http://transpect.io" 
   xmlns:css="http://www.w3.org/1996/css"
   xmlns:html="http://www.w3.org/1999/xhtml"
