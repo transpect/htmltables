@@ -9,7 +9,7 @@ This implements Andrew J Welch's [Table Normalization in XSLT 2.0](http://andrew
 ```xslt
 <xsl:template match="*[*:tr]">
     <xsl:sequence select="htmltable:normalize(.)" />
-  </xsl:template>
+</xsl:template>
 ```
 
 Consider an XML or XHTML document containing HTML tables
