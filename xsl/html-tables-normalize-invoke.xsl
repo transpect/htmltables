@@ -17,9 +17,7 @@
   </xsl:template>
   
   <xsl:template match="*[*:tr]">
-    <xsl:copy>
-      <xsl:sequence select="htmltable:normalize(.)" />
-    </xsl:copy>
+    <xsl:sequence select="htmltable:normalize(.)" />
   </xsl:template>
   
 </xsl:stylesheet>
