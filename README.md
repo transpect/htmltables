@@ -34,13 +34,13 @@ Consider an XML or XHTML document containing HTML tables
 Applying the XSLT function `htmltable:normalize()` will add virtual cells for each colspan and rowspan.
 
 ```
--------------           -------------          
-|  a  |  b  |           |  a  |  b  |             
--------     -           -------------
-|  c  |     |     -->   |  c  |  b  |
--------------           -------------
-|     d     |           |  d  |  d  |
--------------           -------------
+-------------         -------------          
+|  a  |  b  |         |  a  |  b  |             
+-------     -         -------------
+|  c  |     |   -->   |  c  |  b  |
+-------------         -------------
+|     d     |         |  d  |  d  |
+-------------         -------------
 ```
 
 After the normalization, each cell contains `data` attributes which state the former position in the original table. 
