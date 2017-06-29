@@ -10,10 +10,8 @@
   
   <xsl:import href="html-tables-normalize.xsl"/>
   
-  <xsl:template match="* | @* | processing-instruction()">
-    <xsl:copy>
-      <xsl:apply-templates select="@*, node()" mode="#current"/>
-    </xsl:copy>
+  <xsl:template match="* | @* | processing-instruction()" priority="-1">
+    <xsl:copy-of select="."/>
   </xsl:template>
   
   <xsl:template match="*[*:tr]">
