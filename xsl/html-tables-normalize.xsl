@@ -43,6 +43,19 @@
     </xsl:apply-templates>
   </xsl:function>
 
+  <xsl:function name="htmltable:normalize" as="element()+">
+    <xsl:param name="tgroup" as="element()" />
+    
+    <xsl:variable name="table_with_no_colspans" as="element()" >
+      <xsl:apply-templates select="$tgroup" mode="htmltable:normalize-colspans" />
+    </xsl:variable>
+    <xsl:variable name="table_with_no_rowspans">
+      <xsl:apply-templates select="$table_with_no_colspans" mode="htmltable:normalize-rowspans"/>
+    </xsl:variable>
+
+    <xsl:apply-templates select="$table_with_no_rowspans" mode="htmltable:normalize-final" />
+  </xsl:function>
+  
   <xsl:template match="*:tbody | *:thead | *:tfoot | *:table[*:tr]" mode="htmltable:normalize-rowspans">
     <xsl:copy>
       <xsl:copy-of select="@*" />
@@ -72,6 +85,7 @@
       </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
+
 
   <xsl:template match="*:td | *:th" mode="htmltable:normalize-colspans">
     <xsl:variable name="this" select="." as="element()" />
