@@ -27,15 +27,20 @@
        column widths etc. at the moment. -->
   <xsl:function name="htmltable:normalize" as="element()+">
     <xsl:param name="tgroup" as="element()" />
-
+    <xsl:param name="colgroup" as="element()?" />
+    
     <xsl:variable name="table_with_no_colspans" as="element()" >
       <xsl:apply-templates select="$tgroup" mode="htmltable:normalize-colspans" />
     </xsl:variable>
     <xsl:variable name="table_with_no_rowspans">
-      <xsl:apply-templates select="$table_with_no_colspans" mode="htmltable:normalize-rowspans" />
+      <xsl:apply-templates select="$table_with_no_colspans" mode="htmltable:normalize-rowspans">
+        <xsl:with-param name="colgroup" select="$colgroup" as="element()?" tunnel="yes"/>
+      </xsl:apply-templates>
     </xsl:variable>
 
-    <xsl:apply-templates select="$table_with_no_rowspans" mode="htmltable:normalize-final" />
+    <xsl:apply-templates select="$table_with_no_rowspans" mode="htmltable:normalize-final" >
+      <xsl:with-param name="colgroup" as="element()?" select="$colgroup" tunnel="yes"/>
+    </xsl:apply-templates>
   </xsl:function>
 
   <xsl:template match="*:tbody | *:thead | *:tfoot | *:table[*:tr]" mode="htmltable:normalize-rowspans">
@@ -91,25 +96,37 @@
     <xsl:attribute name="data-twips-width" select="tr:length-to-unitless-twip(.)" />
   </xsl:template>
 
-
   <xsl:template match="*[*:tr[*/@data-twips-width]]" mode="htmltable:normalize-final">
+    <xsl:param name="colgroup" as="element()?" tunnel="yes"/>
+    <!-- this only worked if no colspans are in first row -->
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*" mode="#current" />
       <xsl:element name="colgroup" namespace="{namespace-uri(.)}">
         <xsl:variable name="context" select="." as="element(*)" />
-        <xsl:for-each select="1 to count(*:tr[1]/*)">
-          <xsl:element name="col" namespace="{namespace-uri($context)}">
-            <xsl:copy-of select="($context/*:tr/*[position() eq current()]
-                                                 [not(@colspan &gt; 1)]
-                                                 [not(@data-colspan-part &gt; 1)]
-                                 )[1]/@data-twips-width" />
-          </xsl:element>
-        </xsl:for-each>
+        <xsl:choose>
+          <xsl:when test="$colgroup[self::*:colgroup]">
+            <xsl:for-each select="1 to count($colgroup/*:col)">
+              <xsl:element name="col" namespace="{namespace-uri($context)}">
+                <xsl:attribute name="data-twips-width" select="tr:length-to-unitless-twip($colgroup/*:col[position() eq current()]/@width)" />
+              </xsl:element>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:for-each select="1 to count(*:tr[1]/*)">
+              <xsl:element name="col" namespace="{namespace-uri($context)}">
+                <xsl:copy-of select="($context/*:tr/*[position() eq current()]
+                                                     [not(@colspan &gt; 1)]
+                                                     [not(@data-colspan-part &gt; 1)]
+                                     )[1]/@data-twips-width" />
+              </xsl:element>
+            </xsl:for-each>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:element>
       <xsl:apply-templates mode="#current" />
     </xsl:copy>
   </xsl:template>
-
+  
   <xsl:template match="@data-rownum" mode="htmltable:normalize-final">
     <xsl:copy-of select="." />
     <xsl:attribute name="data-colnum" select="htmltable:index-of(../../*, ..)" />
