@@ -10,8 +10,7 @@
   
   <xsl:import href="html-tables-normalize.xsl"/>
   
-  <xsl:template match="*|@*|processing-instruction()" 
-                mode="htmltable:tables-add-atts htmltable:tables-add-atts-denormalize htmltable:tables-add-atts-scale">
+  <xsl:template match="*|@*|processing-instruction()">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
     </xsl:copy>
