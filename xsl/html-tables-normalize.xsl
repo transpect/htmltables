@@ -89,12 +89,12 @@
 
   <xsl:template match="*:td | *:th" mode="htmltable:normalize-colspans">
     <xsl:variable name="this" select="." as="element()" />
-    <xsl:for-each select="1 to (if (@colspan) then @colspan else 1)">
+    <xsl:for-each select="1 to (if (@colspan[. ne '']) then @colspan else 1)">
       <xsl:variable name="count" select="." as="xs:integer" />
       <xsl:for-each select="$this"><!-- this akward for-each is needed in order for the template to stay namespace-agnostic -->
         <xsl:copy>
           <xsl:apply-templates select="@*" mode="#current" />
-          <xsl:if test="$this/@colspan &gt; 1">
+          <xsl:if test="$this/@colspan[. ne ''] &gt; 1">
             <xsl:attribute name="data-colspan-part" select="$count" />
           </xsl:if>
           <xsl:if test="$count eq 1">
@@ -159,7 +159,7 @@
     <xsl:variable name="normalizedTDs" as="element()*">
       <xsl:for-each select="$previousRow/*">
         <xsl:choose>
-          <xsl:when test="@rowspan &gt; 1">
+          <xsl:when test="@rowspan[. ne ''] &gt; 1">
             <xsl:copy>
               <xsl:copy-of select="@*" />
               <xsl:attribute name="rowspan">
@@ -176,7 +176,7 @@
           </xsl:when>
           <xsl:otherwise>
             <xsl:apply-templates
-              select="$currentRow/*[1 + count(current()/preceding-sibling::*[not(@rowspan) or (@rowspan = 1)])]" 
+              select="$currentRow/*[1 + count(current()/preceding-sibling::*[not(@rowspan) or (@rowspan[. ne ''] = 1)])]" 
               mode="#current">
               <xsl:with-param name="rownum" select="$rownum" />
             </xsl:apply-templates>
