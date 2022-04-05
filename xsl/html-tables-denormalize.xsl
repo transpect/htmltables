@@ -11,6 +11,12 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   >
   
+  <xsl:param name="retain" as="xs:string?">
+    <!-- retain="data-colnum data-rownum" in order to retain the attributes with these names -->
+  </xsl:param>
+  
+  <xsl:variable name="retain-att-names" as="xs:string*" select="tokenize($retain, '\s+')"/>
+  
   <xsl:template match="@* | node()">
     <xsl:copy>
       <xsl:apply-templates select="@* | node()"/>
@@ -19,6 +25,7 @@
   
   <xsl:template match="*[local-name() = ('td', 'th')][@*[name() = ('data-colspan-part', 'data-rowspan-part')] > 1]"/>
   
-  <xsl:template match="@data-colspan-part | @data-rownum-part | @data-colnum | @data-rownum"/>
+  <xsl:template match="@*[name() = ('data-colspan-part', 'data-rownum-part', 'data-colnum', 'data-rownum')]
+                         [not(name() = $retain-att-names)]"/>
   
 </xsl:stylesheet>
