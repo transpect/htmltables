@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet 
-  version="2.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xml2idml="http://transpect.io/xml2idml"
   xmlns:tr="http://transpect.io" 
   xmlns:css="http://www.w3.org/1996/css"
@@ -9,10 +7,9 @@
   xmlns:htmltable="http://transpect.io/htmltable"
   xmlns:saxon="http://saxon.sf.net/"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  >
+  version="2.0">
 
   <xsl:import href="http://transpect.io/xslt-util/lengths/xsl/lengths.xsl" />
-
 
   <!-- Taken from http://andrewjwelch.com/code/xslt/table/table-normalization.html 
        and stuffed into a function. Should work for both namespaced and sans-namespace HTML.
@@ -28,7 +25,6 @@
   <xsl:function name="htmltable:normalize" as="element()+">
     <xsl:param name="tgroup" as="element()" />
     <xsl:param name="colgroup" as="element()?" />
-    
     <xsl:variable name="table_with_no_colspans" as="element()" >
       <xsl:apply-templates select="$tgroup" mode="htmltable:normalize-colspans" />
     </xsl:variable>
@@ -37,22 +33,20 @@
         <xsl:with-param name="colgroup" select="$colgroup" as="element()?" tunnel="yes"/>
       </xsl:apply-templates>
     </xsl:variable>
-
     <xsl:apply-templates select="$table_with_no_rowspans" mode="htmltable:normalize-final" >
       <xsl:with-param name="colgroup" as="element()?" select="$colgroup" tunnel="yes"/>
     </xsl:apply-templates>
   </xsl:function>
 
   <xsl:function name="htmltable:normalize" as="element()+">
-    <xsl:param name="tgroup" as="element()" />
-    
+    <xsl:param name="tgroup" as="element()"/>
     <xsl:variable name="table_with_no_colspans" as="element()" >
       <xsl:apply-templates select="$tgroup" mode="htmltable:normalize-colspans" />
     </xsl:variable>
     <xsl:variable name="table_with_no_rowspans">
       <xsl:apply-templates select="$table_with_no_colspans" mode="htmltable:normalize-rowspans"/>
     </xsl:variable>
-
+    <xsl:message select="$table_with_no_rowspans"></xsl:message>
     <xsl:apply-templates select="$table_with_no_rowspans" mode="htmltable:normalize-final" />
   </xsl:function>
   
@@ -63,14 +57,15 @@
       <xsl:for-each select="*:tr[1]">
         <xsl:copy>
           <xsl:apply-templates select="@*" mode="#current" />
-          <xsl:variable name="data-twips-width" select="sum(
-                                                          for $w in *[not(@data-colspan-part &gt; 1)]/@data-twips-width 
-                                                          return (
-                                                            if ($w castable as xs:double)
-                                                            then xs:double($w) 
-                                                            else ()
-                                                          ) 
-                                                        )" as="xs:double?"/>
+          <xsl:variable name="data-twips-width" as="xs:double?" 
+                        select="sum(
+                                  for $w in *[not(@data-colspan-part &gt; 1)]/@data-twips-width 
+                                  return (
+                                    if ($w castable as xs:double)
+                                    then xs:double($w) 
+                                    else ()
+                                  ) 
+                                )"/>
           <xsl:if test="$data-twips-width">
             <xsl:attribute name="data-twips-width" select="$data-twips-width" />
           </xsl:if>
@@ -121,7 +116,8 @@
           <xsl:when test="$colgroup[self::*:colgroup]">
             <xsl:for-each select="1 to count($colgroup/*:col)">
               <xsl:element name="col" namespace="{namespace-uri($context)}">
-                <xsl:attribute name="data-twips-width" select="tr:length-to-unitless-twip($colgroup/*:col[position() eq current()]/@width)" />
+                <xsl:attribute name="data-twips-width" 
+                               select="tr:length-to-unitless-twip($colgroup/*:col[position() eq current()]/@width)" />
               </xsl:element>
             </xsl:for-each>
           </xsl:when>
@@ -230,10 +226,9 @@
   </xsl:template>
 
   <xsl:template match="@*|*" 
-    mode="htmltable:normalize-colspans
-          htmltable:normalize-rowspans
-          htmltable:normalize-final
-          ">
+                mode="htmltable:normalize-colspans
+                      htmltable:normalize-rowspans
+                      htmltable:normalize-final">
     <xsl:copy>
       <xsl:apply-templates select="@* | node()" mode="#current" />
     </xsl:copy>
@@ -244,9 +239,14 @@
   <xsl:function name="htmltable:index-of" as="xs:integer*">
     <xsl:param name="nodes" as="node()*" />
     <xsl:param name="node" as="node()*" />
-    <xsl:sequence select="distinct-values(for $s in $node return (index-of(for $n in $nodes return generate-id($n), generate-id($s))))" />
+    <xsl:sequence select="distinct-values(
+                            for $s in $node 
+                            return (
+                              index-of(
+                                for $n in $nodes 
+                                return generate-id($n), generate-id($s))
+                              )
+                          )" />
   </xsl:function>
-
-
 
 </xsl:stylesheet>

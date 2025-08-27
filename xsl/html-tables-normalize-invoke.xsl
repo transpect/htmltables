@@ -10,14 +10,14 @@
   
   <xsl:import href="html-tables-normalize.xsl"/>
   
-  <xsl:template match="*|@*|processing-instruction()">
-    <xsl:copy copy-namespaces="no">
-      <xsl:apply-templates select="@*, node()" mode="#current"/>
-    </xsl:copy>
-  </xsl:template>
-  
   <xsl:template match="*[*:tr]">
     <xsl:sequence select="htmltable:normalize(.)"/>
+  </xsl:template>
+  
+  <xsl:template match="@* | * | processing-instruction()" mode="#default">
+    <xsl:copy>
+      <xsl:apply-templates select="@*, node()"/>
+    </xsl:copy>
   </xsl:template>
   
 </xsl:stylesheet>
