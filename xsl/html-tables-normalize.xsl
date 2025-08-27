@@ -46,7 +46,6 @@
     <xsl:variable name="table_with_no_rowspans">
       <xsl:apply-templates select="$table_with_no_colspans" mode="htmltable:normalize-rowspans"/>
     </xsl:variable>
-    <xsl:message select="$table_with_no_rowspans"></xsl:message>
     <xsl:apply-templates select="$table_with_no_rowspans" mode="htmltable:normalize-final" />
   </xsl:function>
   
@@ -83,6 +82,8 @@
 
 
   <xsl:template match="*:td | *:th" mode="htmltable:normalize-colspans">
+    <xsl:if test=". = '‘Marie wanted to leave but right that moment the phone rang.”'">  
+    </xsl:if>
     <xsl:variable name="this" select="." as="element()" />
     <xsl:for-each select="1 to (if (@colspan[. ne '']) then @colspan else 1)">
       <xsl:variable name="count" select="." as="xs:integer" />
