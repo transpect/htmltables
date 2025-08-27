@@ -82,8 +82,6 @@
 
 
   <xsl:template match="*:td | *:th" mode="htmltable:normalize-colspans">
-    <xsl:if test=". = '‘Marie wanted to leave but right that moment the phone rang.”'">  
-    </xsl:if>
     <xsl:variable name="this" select="." as="element()" />
     <xsl:for-each select="1 to (if (@colspan[. ne '']) then @colspan else 1)">
       <xsl:variable name="count" select="." as="xs:integer" />
