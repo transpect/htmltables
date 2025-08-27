@@ -40,7 +40,9 @@
           <p:input port="stylesheet">
             <p:document href="http://transpect.io/htmltables/xsl/html-tables-normalize-invoke.xsl"/>
           </p:input>
-          <p:with-param name="process-tables-only" select="'yes'"/>
+          <p:input port="parameters">
+            <p:empty/>
+          </p:input>
         </p:xslt>
         
         <!-- mark already normalized tables. p:viewport starts always with the outer element. -->
