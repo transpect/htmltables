@@ -140,7 +140,11 @@
     <xsl:copy-of select="." />
     <xsl:attribute name="data-colnum" select="htmltable:index-of(../../*, ..)" />
   </xsl:template>
-
+  
+  <xsl:template match="*:th//*[*:tr]
+                      |*:td//*[*:tr]" mode="htmltable:normalize-final">
+    <xsl:sequence select="htmltable:normalize(.)"/>
+  </xsl:template>
 
   <xsl:template match="*:tr" mode="htmltable:normalize-rowspans">
     <xsl:param name="previousRow" as="element()?" />
