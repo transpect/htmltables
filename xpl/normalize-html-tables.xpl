@@ -39,8 +39,6 @@
         <p:with-param name="process-tables-only" select="$process-tables-only"/>
       </p:xslt>
 
-      <tr:normalize-html-tables/>
-
     </p:when>
     <p:otherwise>
       <p:identity/>
