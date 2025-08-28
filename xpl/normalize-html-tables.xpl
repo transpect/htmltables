@@ -24,6 +24,12 @@
     </p:documentation>
   </p:output>
   
+  <p:option name="process-tables-only" select="'yes'">
+    <p:documentation>
+      Set to 'yes' to saves some time copying nodes that are not required for table normalization
+    </p:documentation>
+  </p:option>
+  
   <!-- delete redundant colspan and rowspan attributes derived from dtd resolution -->
   
   <p:delete match="@colspan[. eq '1']
@@ -40,9 +46,7 @@
           <p:input port="stylesheet">
             <p:document href="http://transpect.io/htmltables/xsl/html-tables-normalize-invoke.xsl"/>
           </p:input>
-          <p:input port="parameters">
-            <p:empty/>
-          </p:input>
+          <p:with-param name="process-tables-only" select="$process-tables-only"/>
         </p:xslt>
         
         <!-- mark already normalized tables. p:viewport starts always with the outer element. -->
