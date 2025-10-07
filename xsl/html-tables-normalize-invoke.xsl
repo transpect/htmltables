@@ -8,9 +8,9 @@
   <!-- This stylesheet is used to simply invoke htmltable:normalize()
        without the additional stuff in html-tables.xsl  -->
   
-  <xsl:param name="process-tables-only" as="xs:string" select="'no'"/>
-  
   <xsl:import href="html-tables-normalize.xsl"/>
+  
+  <xsl:param name="process-tables-only" as="xs:string" select="'no'"/>
   
   <xsl:template match="*[*:tr]">
     <xsl:sequence select="htmltable:normalize(.)"/>
